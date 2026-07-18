@@ -79,7 +79,11 @@ def get_printer_info(ip: str):
         return None
         
     hostname = base_results.get(base_oids["sysName"], "")
-    location = base_results.get(base_oids["sysLocation"], "")
+    location = (
+    base_results.get(base_oids["sysLocation"])
+    or base_results.get(base_oids["sysName"])
+    or "Unknown"
+)
     model = base_results.get(base_oids["hrDeviceDescr"]) or printer_name or ""
     sys_descr = base_results.get(base_oids["sysDescr"], "")
     page_count_str = base_results.get(base_oids["pageCount"])
@@ -197,7 +201,25 @@ def get_printer_info(ip: str):
             elif "pf kit" in desc_lower:
                 pf_kit_1 = pct
 
-    is_color = not (toner_cyan is None and toner_magenta is None and toner_yellow is None)
+
+    is_color = not (
+    toner_cyan is None and
+    toner_magenta is None and
+    toner_yellow is None
+)
+
+    is_color = not (
+        toner_cyan is None and
+        toner_magenta is None and
+        toner_yellow is None
+    )
+
+    print("=" * 50)
+    print("HOSTNAME :", hostname)
+    print("LOCATION :", location)
+    print("SYSNAME  :", base_results.get(base_oids["sysName"]))
+    print("SYSLOC   :", base_results.get(base_oids["sysLocation"]))
+    print("=" * 50)
 
     return {
         "hostname": hostname or "",

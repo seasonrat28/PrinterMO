@@ -1,18 +1,14 @@
-from app.services.snmp_service import snmp_walk
+from app.services.snmp_service import snmp_get_multiple
 
 ip = "10.119.34.21"
 
 oids = [
-    "1.3.6.1.2.1.43",
-    "1.3.6.1.4.1.2435",
-    "1.3.6.1.4.1.1240"
+    "1.3.6.1.2.1.1.5.0",   # sysName
+    "1.3.6.1.2.1.1.6.0",   # sysLocation
+    "1.3.6.1.2.1.1.1.0"    # sysDescr
 ]
 
+result = snmp_get_multiple(ip, oids, timeout=3)
 
-for oid in oids:
-    print("\n==========", oid, "==========")
-
-    result = snmp_walk(ip, oid)
-
-    for k,v in result.items():
-        print(k, "=", v)
+for k,v in result.items():
+    print(k,"=",v)
